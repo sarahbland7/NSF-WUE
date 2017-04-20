@@ -1,20 +1,20 @@
 % Student Name: Sarah Bland 
-% Program Name: SWAS_Q_GS.m // PROGRAM #2
+% Program Name: SWAS_Q_WY.m // PROGRAM #1
 % Description: Opens and analyzes discharge (Q) data for 4 SWAS sites in the 
-% Shenandoah National Park by GROWING SEASON.
+% Shenandoah National Park by WATER YEAR.
 %
+% NOTE: Water year is defined for all SWAS sites as being from the final
+% 1/4 of calendar year A through 3/4 of calendar year B (i.e. October - September).
 % NOTE: Growing season is defined for all SWAS sites as being from April - September.
-% NOTE: Information obtained from the following sites:
-% - http://onlinelibrary.wiley.com/doi/10.1029/2011WR010977/full - CATCHMENT SIZES 
 
 
 
 %Make a subplot of all figures
-figure(2)
-clf(2)
-set(figure(2),'position',[0, 0, 1250, 750]);
+figure(1)
+clf(1)
+set(figure(1),'position',[0, 0, 1250, 750]);
 %'position' // left, bottom, width, height
-set(figure(2),'name','Discharge - Growing Season','numbertitle','off')
+set(figure(1),'name','Discharge - Water Year','numbertitle','off')
 %set name & turn off typical number title 
 
 
@@ -36,7 +36,7 @@ PAIN_day = PAIN_NUM_Q(:,7);           %Day (", 7th column)
 
 %Make a plot of discharge 
 subplot(2,4,1)
-plot(PAIN_dateStage,PAIN_cfs);        %plots dates on x-axis by cfs data on y-axis
+plot(PAIN_dateStage,PAIN_cfs);      %plots dates on x-axis by cfs data on y-axis
 datetick('x',10);                         
 xlabel('Year');
 ylabel('Stream Discharge (cfs)')
@@ -44,23 +44,23 @@ title('Paine Run, SHEN');
 
 %Calculate annual discharge in meters per water year
 wy = 1993:2015;
-ave_gsQpa = zeros(1, 23);
+ave_wyQpa = zeros(1, 23);
 for i = 1:23
-    ii = find(PAIN_year == wy(i) & (4 <= PAIN_month & PAIN_month <= 9));
-    %returns indices from April to September w/in a given calendar year/ water year
+    ii = find((PAIN_year == (wy(i) - 1) & PAIN_quart == 4) | (PAIN_year == wy(i) & PAIN_quart < 4));
+    %returns indices of a given water year (both 4th 1/4 of calendar year A & 1st 3/4 of calendar year B)
     %using '|' and '&' for comparison of non-logical scalar values 
-    ave_gsQpa(i) = conversion(mean(PAIN_cfs(ii)))/12400000;
+    ave_wyQpa(i) = conversion(mean(PAIN_cfs(ii)))/12400000;
     %(1) access cfs values for year's time (ft^3/second) (2) take mean of year's values
     %(3) make conversion (m^3/wy) (4) divide by catchment area of (m^2), resulting in (m/wy)
-    %(5) store resulting values in arrray
+    %(5) store resulting values in array
     %Catchment Area = 12.4 km^2 * 1000000 m^2/km^2 = 12400000 m^2 
 end
 
 %Make a bar graph of output 
 subplot(2,4,5)
-bar(wy, ave_gsQpa)                  %plots years on x-axis by m/wy
+bar(wy, ave_wyQpa)                  %plots years on x-axis by m/wy
 xlabel('Year');
-ylabel('Average Stream Discharge (m/gs)')
+ylabel('Average Stream Discharge (m/wy)')
 title('Paine Run, SHEN');
 
 
@@ -87,18 +87,18 @@ title('Staunton River, SHEN');
 
 %Calculate annual discharge in meters per water year
 wy = 1993:2015;
-ave_gsQst = zeros(1, 23);
+ave_wyQst = zeros(1, 23);
 for i = 1:23
-    ii = find(STAN_year == wy(i) & (4 <= STAN_month & STAN_month <= 9));
-    ave_gsQst(i) = conversion(mean(STAN_cfs(ii)))/10500000;
+    ii = find((STAN_year == (wy(i) - 1) & STAN_quart == 4) | (STAN_year == wy(i) & STAN_quart < 4));
+    ave_wyQst(i) = conversion(mean(STAN_cfs(ii)))/10500000;
     %Catchment Area =  10.5 km^2 * 1000000 m^2/km^2 = 10500000 m^2 
 end
 
 %Make a bar graph of output 
 subplot(2,4,6)
-bar(wy, ave_gsQst)
+bar(wy, ave_wyQst)
 xlabel('Year');
-ylabel('Average Stream Discharge (m/gs)')
+ylabel('Average Stream Discharge (m/wy)')
 title('Staunton River, SHEN');
 
 
@@ -125,18 +125,18 @@ title('Piney River, SHEN');
 
 %Calculate annual discharge in meters per water year
 wy = 1993:2015;
-ave_gsQpi = zeros(1, 23);
+ave_wyQpi = zeros(1, 23);
 for i = 1:23
-    ii = find(PINE_year == wy(i) & (4 <= PINE_month & PINE_month <= 9));
-    ave_gsQpi(i) = conversion(mean(PINE_cfs(ii)))/12600000;
+    ii = find((PINE_year == (wy(i) - 1) & PINE_quart == 4) | (PINE_year == wy(i) & PINE_quart < 4));
+    ave_wyQpi(i) = conversion(mean(PINE_cfs(ii)))/12600000;
     %Catchment Area =  12.6 km^2 * 1000000 m^2/km^2 = 12600000 m^2 
 end
 
 %Make a bar graph of output 
 subplot(2,4,7)
-bar(wy, ave_gsQpi)
+bar(wy, ave_wyQpi)
 xlabel('Year');
-ylabel('Average Stream Discharge (m/gs)')
+ylabel('Average Stream Discharge (m/wy)')
 title('Piney River, SHEN');
 
 
@@ -146,16 +146,16 @@ title('Piney River, SHEN');
 [WOR_NUM_Q,WOR_TXT_Q,WOR_RAW_Q] = xlsread('daily_Q.xlsx','WOR','A1:H13211');
 
 %Read in numeric data
-WOR_cfs2 = WOR_NUM_Q(:,1);         
-WOR_dateStage2= WOR_NUM_Q(:,3);    
-WOR_year2 = WOR_NUM_Q(:,4);        
-WOR_quart2 = WOR_NUM_Q(:,5);         
-WOR_month2= WOR_NUM_Q(:,6);      
-WOR_day2 = WOR_NUM_Q(:,7);          
+WOR_cfs = WOR_NUM_Q(:,1);         
+WOR_dateStage= WOR_NUM_Q(:,3);    
+WOR_year = WOR_NUM_Q(:,4);        
+WOR_quart = WOR_NUM_Q(:,5);         
+WOR_month= WOR_NUM_Q(:,6);      
+WOR_day = WOR_NUM_Q(:,7);          
 
 %Make a plot of discharge 
 subplot(2,4,4)
-plot(WOR_dateStage2,WOR_cfs2);      
+plot(WOR_dateStage,WOR_cfs);      
 datetick('x',10);                         
 xlabel('Year');
 ylabel('Stream Discharge (cfs)')
@@ -164,24 +164,24 @@ title('White Oak Run, SHEN');
 %Calculate annual discharge in meters per water year
 %DATA FROM 1979 - 2015 
 wy1 = 1980:2015;
-ave_gsQwh = zeros(1, 36);
+ave_wyQwh = zeros(1, 36);
 for i = 1:36
-    ii = find(WOR_year2 == wy1(i) & (4 <= WOR_month2 & WOR_month2 <= 9));
-    ave_gsQwh(i) = conversion(mean(WOR_cfs2(ii)))/5150000;
+    ii = find((WOR_year == (wy1(i) - 1) & WOR_quart == 4) | (WOR_year == wy1(i) & WOR_quart < 4));
+    ave_wyQwh(i) = conversion(mean(WOR_cfs(ii)))/5150000;
     %Catchment Area = 515 ha = 5.15 km^2 * 1000000 m^2/km^2 = 5150000 m^2 
 end
 
 %Make a bar graph of output 
 subplot(2,4,8)
-bar(wy1, ave_gsQwh)
+bar(wy1, ave_wyQwh)
 xlabel('Year (1980 - 2015)');
-ylabel('Average Stream Discharge (m/gs)')
+ylabel('Average Stream Discharge (m/wy)')
 title('White Oak Run, SHEN');
 
 
 
-%FUNCTION which converts cfs to m^3/gs 
+%FUNCTION which converts cfs to m^3/wy
 function y = conversion(x)
-y = x * (1/35.314667) * (60/1) * (60/1) * (24/1) * (182/1);
-%(ft^3/s) * (m^3/ft^3) * (s/min) * (min/hr) * (hr/day)* (days/gs)
+y = x * (1/35.314667) * (60/1) * (60/1) * (24/1) * (365.25/1);
+%(ft^3/s) * (m^3/ft^3) * (s/min) * (min/hr) * (hr/day)* (day/wy)
 end
