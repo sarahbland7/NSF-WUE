@@ -80,7 +80,7 @@ WS7_P_SUM = conv(WS7_precipitation, kernel, 'valid');   %Get sliding sums (w/o 0
 %DISPLAY THE DATA FOR 3 SITES @ 20%
 figure(3)
 clf
-set(figure(3),'position',[0, 0, 1300, 1250]);
+set(figure(3),'position',[0, 0, 1300, 1000]);
 %'position' // left, bottom, width, height
 set(figure(3),'name','Moving Window Analysis - 20th Percentile','numbertitle','off')
 %set name & turn off typical number title 
@@ -108,7 +108,7 @@ title('Watershed 7');
 %DISPLAY THE DATA FOR 3 SITES @ 40%
 figure(4)
 clf
-set(figure(4),'position',[0, 0, 1300, 1250]);
+set(figure(4),'position',[0, 0, 1300, 1000]);
 %'position' // left, bottom, width, height
 set(figure(4),'name','Moving Window Analysis - 40th Percentile','numbertitle','off')
 %set name & turn off typical number title 
@@ -130,3 +130,71 @@ plot(WS7_YRS, (WS7_Q_PER40./WS7_P_SUM));
 xlabel('Time (yrs)');
 ylabel('(40% Q) / P')
 title('Watershed 7');
+
+
+
+%COMPARISON OF WS3 & WS4 - 20% & 40% 
+figure(5)
+clf
+set(figure(5),'position',[0, 0, 1300, 1250]);
+%'position' // left, bottom, width, height
+set(figure(5),'name','Moving Window Comparison - WS3 vs. WS4','numbertitle','off')
+%set name & turn off typical number title 
+
+subplot(4,1,1)
+scatter((WS3_Q_PER20./WS3_P_SUM), (WS4_Q_PER20./WS4_P_SUM));       
+xlabel('WS3');
+ylabel('WS4')
+title('Watershed 3 vs. Watershed 4 - 20th Percentile');
+
+subplot(4,1,2)
+plot(WS3_YRS, ((WS3_Q_PER20./WS3_P_SUM)./(WS4_Q_PER20./WS4_P_SUM)));       
+xlabel('Time');
+ylabel('WS3/WS4')
+title('Time vs. (Watershed 3/Watershed 4) - 20th Percentile');
+
+subplot(4,1,3)
+scatter((WS3_Q_PER40./WS3_P_SUM), (WS4_Q_PER40./WS4_P_SUM));
+xlabel('WS3');
+ylabel('WS4')
+title('Watershed 3 vs. Watershed 4 - 40th Percentile');
+
+subplot(4,1,4)
+plot(WS3_YRS, ((WS3_Q_PER40./WS3_P_SUM)./(WS4_Q_PER40./WS4_P_SUM)));       
+xlabel('Time');
+ylabel('WS3/WS4')
+title('Time vs. (Watershed 3/Watershed 4) - 40th Percentile');
+
+
+
+%COMPARISON OF WS3 & WS7 - 20% & 40% 
+figure(6)
+clf
+set(figure(6),'position',[0, 0, 1300, 1250]);
+%'position' // left, bottom, width, height
+set(figure(6),'name','Moving Window Comparison - WS3 vs. WS7','numbertitle','off')
+%set name & turn off typical number title 
+
+subplot(4,1,1)
+scatter((WS3_Q_PER20./WS3_P_SUM), (WS7_Q_PER20./WS7_P_SUM));       
+xlabel('WS3');
+ylabel('WS7')
+title('Watershed 3 vs. Watershed 7 - 20th Percentile');
+
+subplot(4,1,2)
+plot(WS3_YRS, ((WS3_Q_PER20./WS3_P_SUM)./(WS7_Q_PER20./WS7_P_SUM)));       
+xlabel('Time');
+ylabel('WS3/WS7')
+title('Time vs. (Watershed 3/Watershed 7) - 20th Percentile');
+
+subplot(4,1,3)
+scatter((WS3_Q_PER40./WS3_P_SUM), (WS7_Q_PER40./WS7_P_SUM));
+xlabel('WS3');
+ylabel('WS7')
+title('Watershed 3 vs. Watershed 7 - 40th Percentile');
+
+subplot(4,1,4)
+plot(WS3_YRS, ((WS3_Q_PER40./WS3_P_SUM)./(WS7_Q_PER40./WS7_P_SUM)));       
+xlabel('Time');
+ylabel('WS3/WS7')
+title('Time vs. (Watershed 3/Watershed 7) - 40th Percentile');
